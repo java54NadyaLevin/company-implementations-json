@@ -142,7 +142,7 @@ public class CompanyMapsImpl implements Company, Persistable {
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(filePathStr));
 			reader.lines().forEach(line -> {
-				Employee empl = createInstance(line);
+				Employee empl = setInstance(line);
 				addEmployee(empl);
 			});
 		} catch (FileNotFoundException e) {
@@ -151,7 +151,7 @@ public class CompanyMapsImpl implements Company, Persistable {
 
 	}
 
-	private Employee createInstance(String line) {
+	private Employee setInstance(String line) {
 		JSONObject jsonObject = new JSONObject(line);
 		String className = jsonObject.getString("className");
 		Employee empl;
