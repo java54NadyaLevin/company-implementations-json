@@ -88,17 +88,18 @@ public class Employee implements Comparable<Employee>, JSONable {
 	}
 
 	@Override
-	public void setObject(String json) {
+	public JSONable setObject(String json) {
+		JSONable empl;
 		JSONObject jsonObject = new JSONObject(json);
 		String className = jsonObject.getString("className");
 		try {
-			Employee empl = (Employee) Class.forName(className)
+			empl = (Employee) Class.forName(className)
 					.getConstructor().newInstance();
-			empl.fillEmployee(jsonObject);
+			((Employee) empl).fillEmployee(jsonObject);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		
+		return empl;
 	}
 
 	protected void fillEmployee(JSONObject jsonObject) {

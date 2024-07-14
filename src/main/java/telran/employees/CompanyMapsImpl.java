@@ -6,12 +6,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.json.JSONObject;
-
+import telran.io.JSONable;
 import telran.io.Persistable;
 
 //So far we do consider optimization
@@ -128,7 +127,6 @@ public class CompanyMapsImpl implements Company, Persistable {
 
 			while (it.hasNext()) {
 				writer.println(it.next().getJSON());
-
 			}
 
 		} catch (IOException e) {
@@ -142,8 +140,9 @@ public class CompanyMapsImpl implements Company, Persistable {
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(filePathStr));
 			reader.lines().forEach(line -> {
-				Employee empl = setInstance(line);
-				addEmployee(empl);
+				JSONable empl = new Employee();
+				empl = empl.setObject(line);
+				addEmployee((Employee)empl);
 			});
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -151,20 +150,20 @@ public class CompanyMapsImpl implements Company, Persistable {
 
 	}
 
-	private Employee setInstance(String line) {
-		JSONObject jsonObject = new JSONObject(line);
-		String className = jsonObject.getString("className");
-		Employee empl;
-		try {
-			empl = (Employee) Class
-					.forName(className)
-					.getConstructor()
-					.newInstance();
-			empl.fillEmployee(jsonObject);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		return empl;
-	}
+//	private Employee setInstance(String line) {
+//		JSONObject jsonObject = new JSONObject(line);
+//		String className = jsonObject.getString("className");
+//		Employee empl;
+//		try {
+//			empl = (Employee) Class
+//					.forName(className)
+//					.getConstructor()
+//					.newInstance();
+//			empl.fillEmployee(jsonObject);
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
+//		return empl;
+//	}
 
 }
